@@ -1,15 +1,13 @@
-import jwt, { Secret, SignOptions } from "jsonwebtoken";
+import jwt, { Secret } from "jsonwebtoken";
 
 import { NextResponse } from "next/server";
-import { compare } from "bcrypt-ts";
-import { getUser } from "../../../lib/db/queries";
-
+import { getUser, insertRefreshToken } from "../../../lib/db/queries";
 import { env } from "@/app/lib/config/config";
+import { genSaltSync, hashSync, compare } from "bcrypt-ts";
 
 export async function POST(req: Request) {
-  const { userName, password } = await req.json();
-
-  const user = await getUser(userName);
+  const { username, password } = await req.json();
+  const user = await getUser(username);
 
   if (!user) {
     return NextResponse.json({ error: "User does not exist" }, { status: 401 });
@@ -28,19 +26,28 @@ export async function POST(req: Request) {
 
   const secret: Secret = env.JWT_SECRET;
 
-  const signOptions: SignOptions = {
-    expiresIn: env.JWT_EXPIRES_IN,
-  };
-
-  const token = jwt.sign(payload, secret, signOptions);
+  const accessToken = jwt.sign(payload, secret, { expiresIn: 3600 });
+  const refreshToken = jwt.sign(payload, secret, { expiresIn: 86400 });
+  const salt = genSaltSync(10);
+  const hash = hashSync(refreshToken, salt);
 
   const response = NextResponse.json({ message: "Login successful" });
 
-  response.cookies.set("authToken", token, {
+  await insertRefreshToken(String(payload.username), 86400, hash);
+
+  response.cookies.set("accessToken", accessToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
-    maxAge: Number(process.env.JWT_EXPIRES_IN),
+    maxAge: 3600,
+    path: "/",
+  });
+
+  response.cookies.set("refreshToken", accessToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 86400,
     path: "/",
   });
 

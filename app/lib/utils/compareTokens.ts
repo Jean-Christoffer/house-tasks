@@ -1,0 +1,15 @@
+import { getRefreshToken } from "../db/queries";
+import { compare } from "bcrypt-ts";
+
+export const compareTokens = async (token: string) => {
+  const tokenToCompare = await getRefreshToken(token);
+  console.log(tokenToCompare);
+
+  if (!tokenToCompare) return false;
+
+  const refreshTokenMatches = await compare(token, tokenToCompare);
+
+  if (!refreshTokenMatches) return false;
+
+  return true;
+};
