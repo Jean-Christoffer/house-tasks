@@ -1,4 +1,4 @@
-import jwt, { Secret, SignOptions } from "jsonwebtoken";
+import jwt, { Secret } from "jsonwebtoken";
 
 import { NextResponse } from "next/server";
 import { getUser, insertRefreshToken } from "../../../lib/db/queries";
@@ -26,19 +26,14 @@ export async function POST(req: Request) {
 
   const secret: Secret = env.JWT_SECRET;
 
-  const signOptions: SignOptions = {
-    expiresIn: env.JWT_EXPIRES_IN,
-  };
-
-  const refreshToken = jwt.sign(payload, secret, signOptions);
-
   const accessToken = jwt.sign(payload, secret, { expiresIn: 3600 });
+  const refreshToken = jwt.sign(payload, secret, { expiresIn: 86400 });
   const salt = genSaltSync(10);
   const hash = hashSync(refreshToken, salt);
 
   const response = NextResponse.json({ message: "Login successful" });
 
-  await insertRefreshToken(String(payload.username), env.JWT_EXPIRES_IN, hash);
+  await insertRefreshToken(String(payload.username), 86400, hash);
 
   response.cookies.set("accessToken", accessToken, {
     httpOnly: true,
