@@ -2,74 +2,84 @@ import { NextResponse } from "next/server";
 import { parseAuthCookie, verifyJwt } from "./app/lib/utils/jwt";
 
 import type { NextRequest } from "next/server";
+import { NextURL } from "next/dist/server/web/next-url";
 
 const redirectToLogin = (request: NextRequest) => {
+  const { origin } = request.nextUrl;
+
   try {
-    const response = NextResponse.redirect(new URL("/login", request.url));
+    const loginUrl = new NextURL("/login", origin);
+    const response = NextResponse.redirect(loginUrl);
+
     response.cookies.delete("accessToken");
     response.cookies.delete("refreshToken");
+
     return response;
   } catch (err) {
     console.error(err);
   }
 };
 
+//TODO: refactor this :))
+
 export async function middleware(request: NextRequest) {
+  const { pathname, origin } = request.nextUrl;
+
   const tokens = parseAuthCookie(request.headers.get("cookie"));
 
   const accessToken = tokens?.accessToken;
   const refreshToken = tokens?.refreshToken;
 
-  const isProtectedRoute = !request.nextUrl.pathname.startsWith("/login");
+  if (!accessToken && !refreshToken && pathname !== "/login") {
+    return redirectToLogin(request);
+  }
 
-  if (isProtectedRoute) {
-    if (!accessToken && !refreshToken) {
+  if (accessToken) {
+    const payload = await verifyJwt(accessToken);
+    if (payload) {
+      if (pathname === "/login") {
+        const homePageUrl = new NextURL("/", origin);
+        return NextResponse.redirect(homePageUrl);
+      }
+      return NextResponse.next();
+    }
+  }
+
+  if (refreshToken) {
+    const payload = await verifyJwt(refreshToken);
+
+    if (!payload && pathname !== "/login") {
       return redirectToLogin(request);
     }
 
-    if (accessToken) {
-      const payload = await verifyJwt(accessToken);
-      if (payload) {
-        return NextResponse.next();
-      }
+    const refreshResponse = await fetch(
+      `${request.nextUrl.origin}/api/auth/refresh`,
+      {
+        method: "POST",
+        headers: { cookie: `refreshToken=${refreshToken}` },
+      },
+    );
+
+    if (!refreshResponse.ok) {
+      console.error("Refresh token failed", await refreshResponse.json());
+      if (pathname !== "/login") return redirectToLogin(request);
     }
 
-    if (refreshToken) {
-      const payload = await verifyJwt(refreshToken);
+    if (refreshResponse.ok) {
+      const response = NextResponse.next();
 
-      if (!payload) {
-        return redirectToLogin(request);
-      }
+      const setCookieHeaders = refreshResponse.headers.getSetCookie();
 
-      const refreshResponse = await fetch(
-        `${request.nextUrl.origin}/api/auth/refresh`,
-        {
-          method: "POST",
-          headers: { cookie: `refreshToken=${refreshToken}` },
-        },
-      );
-
-      if (!refreshResponse.ok) {
-        console.error("Refresh token failed", await refreshResponse.json());
-        return redirectToLogin(request);
-      }
-
-      if (refreshResponse.ok) {
-        const response = NextResponse.next();
-
-        const setCookieHeaders = refreshResponse.headers.getSetCookie();
-
-        if (setCookieHeaders.length > 0) {
-          for (const cookie of setCookieHeaders) {
-            response.headers.append("set-cookie", cookie);
-          }
-          return response;
-        } else {
-          return NextResponse.json(
-            { message: "something went wrong" },
-            { status: 401 },
-          );
+      if (setCookieHeaders.length > 0) {
+        for (const cookie of setCookieHeaders) {
+          response.headers.append("set-cookie", cookie);
         }
+        return response;
+      } else {
+        return NextResponse.json(
+          { message: "something went wrong" },
+          { status: 401 },
+        );
       }
     }
 
@@ -78,5 +88,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/login"],
 };
