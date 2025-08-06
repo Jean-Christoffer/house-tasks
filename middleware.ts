@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { parseAuthCookie, verifyJwt } from "./app/lib/utils/jwt";
 
 import type { NextRequest } from "next/server";
+
 import { NextURL } from "next/dist/server/web/next-url";
 
 const redirectToLogin = (request: NextRequest) => {
@@ -88,5 +89,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/login"],
+  matcher: ["/login", "/"],
 };
