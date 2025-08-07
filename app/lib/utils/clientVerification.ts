@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { verifyJwt } from "../utils/jwt";
-import { getUserInfo } from "../db/queries";
+import { getUserInfo } from "../db/queries/relationQueries";
 
 export async function verifyAndGetUserServer() {
   const allCookies = await cookies();
