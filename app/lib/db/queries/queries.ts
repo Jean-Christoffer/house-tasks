@@ -1,7 +1,7 @@
 import { genSaltSync, hashSync, compare } from "bcrypt-ts";
 import { db } from "../db";
-import { users, tokens, household, householdMembers } from "../schema";
-import { eq } from "drizzle-orm";
+import { users, tokens, household, householdMembers, tasks } from "../schema";
+import { eq, sql } from "drizzle-orm";
 import { nanoid } from "nanoid";
 
 export async function createUser(userName: string, password: string) {
@@ -117,4 +117,53 @@ export async function createHousehold(userName: string, houseName: string) {
       userId: user.id,
     });
   });
+}
+
+export async function createTask(
+  userName: string,
+  taskName: string,
+  taskDescription: string,
+  householdId: number,
+) {
+  try {
+    await db.transaction(async (tx) => {
+      const [user] = await tx
+        .select()
+        .from(users)
+        .where(eq(users.userName, userName))
+        .limit(1);
+
+      if (!user) throw new Error("User not found");
+
+      await tx.insert(tasks).values({
+        taskName,
+        taskDescription,
+        createdByUserId: user.id,
+        householdId,
+      });
+    });
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+export async function completeTask(userId: number, taskId: number) {
+  await db.transaction(async (tx) => {
+    await tx.update(tasks).set({ completed: true }).where(eq(tasks.id, taskId));
+    await tx
+      .update(users)
+      .set({ completedTasks: sql`${users.completedTasks} + 1` })
+      .where(eq(users.id, userId));
+  });
+}
+
+export async function assignTask(
+  userId: number,
+  taskId: number,
+  householdId: number,
+) {
+  await db
+    .update(tasks)
+    .set({ assignedToUserId: userId, householdId: householdId })
+    .where(eq(tasks.id, taskId));
 }

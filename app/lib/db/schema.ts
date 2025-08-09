@@ -5,6 +5,7 @@ import {
   uniqueIndex,
   text,
   varchar,
+  boolean,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
@@ -16,7 +17,7 @@ export const users = pgTable(
     id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
     userName: varchar("userName", { length: 256 }).notNull().unique(),
     password: t.varchar("password", { length: 64 }).notNull(),
-    completedTasks: integer("completed_tasks").default(0),
+    completedTasks: integer("completed_tasks").notNull().default(0),
   },
   (table) => [uniqueIndex("userName_idx").on(table.userName)],
 );
@@ -37,7 +38,8 @@ export const tasks = pgTable("tasks", {
     .references(() => users.id),
   taskName: varchar("task_name", { length: 254 }).notNull(),
   taskDescription: text("task_description").notNull(),
-  createdAt: timestamp("created_at").defaultNow(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  completed: boolean("completed").notNull().default(false),
 });
 
 export const tasksRelations = relations(tasks, ({ one }) => ({
@@ -51,7 +53,9 @@ export const household = pgTable("household", {
   id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
   inviteCode: varchar("invite_code", { length: 32 }).notNull().unique(),
   houseName: varchar("house_name", { length: 254 }).notNull(),
-  createdByUserId: integer("created_by_user_id").references(() => users.id),
+  createdByUserId: integer("created_by_user_id")
+    .notNull()
+    .references(() => users.id),
 });
 
 export const householdRelations = relations(household, ({ one }) => ({
