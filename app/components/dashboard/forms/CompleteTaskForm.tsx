@@ -4,19 +4,14 @@ import { CheckCircle2 } from "lucide-react";
 import { z } from "zod";
 
 const CompleteTaskSchema = z.object({
-  userId: z.coerce.number().int().positive(),
   taskId: z.coerce.number().int().positive(),
 });
 
 interface CompleteTaskFormProps {
-  userId: number;
   taskId: number;
 }
 
-export default function CompleteTaskForm({
-  userId,
-  taskId,
-}: CompleteTaskFormProps) {
+export default function CompleteTaskForm({ taskId }: CompleteTaskFormProps) {
   async function completeTask(formData: FormData) {
     try {
       const raw = Object.fromEntries(formData.entries());
@@ -27,7 +22,7 @@ export default function CompleteTaskForm({
         throw new Error(pretty);
       }
 
-      const { userId, taskId } = parsed.data;
+      const { taskId } = parsed.data;
       await completeCurrentTask(taskId);
     } catch (err) {
       console.log(err);
@@ -36,7 +31,6 @@ export default function CompleteTaskForm({
 
   return (
     <form action={completeTask}>
-      <input type="hidden" name="userId" value={userId} />
       <input type="hidden" name="taskId" value={taskId} />
 
       <Button
