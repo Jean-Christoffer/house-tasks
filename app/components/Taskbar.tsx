@@ -35,11 +35,11 @@ export default function Taskbar({
     <div>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button>Create a task</Button>
+          <Button>Lag en oppave</Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Create a new task</DialogTitle>
+            <DialogTitle>Lag en ny oppgave</DialogTitle>
           </DialogHeader>
 
           <form
@@ -52,7 +52,9 @@ export default function Taskbar({
           >
             <div className="space-y-4 py-4">
               <div>
-                <Label htmlFor="taskName">Task Name</Label>
+                <Label htmlFor="taskName" className="mb-2">
+                  Navn på oppgave
+                </Label>
                 <Input
                   id="taskName"
                   name="taskName"
@@ -62,7 +64,9 @@ export default function Taskbar({
                 />
               </div>
               <div>
-                <Label htmlFor="taskDescription">Description</Label>
+                <Label htmlFor="taskDescription" className="mb-2">
+                  Beskrivelse
+                </Label>
                 <Textarea
                   id="taskDescription"
                   name="taskDescription"
@@ -74,13 +78,13 @@ export default function Taskbar({
             </div>
 
             <DialogFooter>
-              <Button type="submit">Create Task</Button>
+              <Button type="submit">Lag oppgave</Button>
             </DialogFooter>
           </form>
         </DialogContent>
       </Dialog>
 
-      {shouldRenderJoinHouseHold && <Button>Join a household</Button>}
+      {shouldRenderJoinHouseHold && <Button>Bli med i et hjem!</Button>}
     </div>
   );
 }

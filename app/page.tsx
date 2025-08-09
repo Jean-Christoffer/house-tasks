@@ -2,7 +2,7 @@ import type { NextRequest } from "next/server";
 
 import { NextResponse } from "next/server";
 import { verifyAndGetUserServer } from "./lib/utils/clientVerification";
-import Dashboard from "./components/Dashboard";
+import Dashboard from "./components/dashboard/Dashboard";
 
 export default async function Home(request: NextRequest) {
   const user = await verifyAndGetUserServer();
