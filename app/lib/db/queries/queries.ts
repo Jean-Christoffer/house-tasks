@@ -120,7 +120,7 @@ export async function createHousehold(userName: string, houseName: string) {
 }
 
 export async function createTask(
-  userName: string,
+  userId: number,
   taskName: string,
   taskDescription: string,
   householdId: number,
@@ -130,7 +130,7 @@ export async function createTask(
       const [user] = await tx
         .select()
         .from(users)
-        .where(eq(users.userName, userName))
+        .where(eq(users.id, userId))
         .limit(1);
 
       if (!user) throw new Error("User not found");

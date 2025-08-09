@@ -1,14 +1,17 @@
-import type { NextRequest } from "next/server";
+import { userInfo } from "./lib/actions/user";
+import Link from "next/link";
 
-import { NextResponse } from "next/server";
-import { verifyAndGetUserServer } from "./lib/utils/clientVerification";
 import Dashboard from "./components/dashboard/Dashboard";
 
-export default async function Home(request: NextRequest) {
-  const user = await verifyAndGetUserServer();
+export default async function Home() {
+  const user = await userInfo();
 
-  if (!user) return NextResponse.redirect(new URL("/login", request.url));
-  console.log(user);
+  if (!user)
+    return (
+      <main className="flex justify-center items-center">
+        <Link href="/signin">Login for å se dasbordet ditt</Link>
+      </main>
+    );
 
   return (
     <main>

@@ -84,11 +84,7 @@ export default function TaskCard({
 
             <div className="flex items-center gap-2">
               {canAssign ? (
-                <AssignTaskForm
-                  userId={userId}
-                  taskId={task.id}
-                  householdId={householdId}
-                />
+                <AssignTaskForm taskId={task.id} householdId={householdId} />
               ) : null}
 
               {canComplete ? (

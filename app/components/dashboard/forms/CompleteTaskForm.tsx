@@ -28,7 +28,7 @@ export default function CompleteTaskForm({
       }
 
       const { userId, taskId } = parsed.data;
-      await completeCurrentTask(userId, taskId);
+      await completeCurrentTask(taskId);
     } catch (err) {
       console.log(err);
     }
