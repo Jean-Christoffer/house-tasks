@@ -1,7 +1,7 @@
 import jwt, { Secret } from "jsonwebtoken";
 
 import { NextResponse } from "next/server";
-import { getUser, insertRefreshToken } from "../../../lib/db/queries";
+import { getUser, insertRefreshToken } from "../../../lib/db/queries/queries";
 import { env } from "@/app/lib/config/config";
 import { genSaltSync, hashSync, compare } from "bcrypt-ts";
 

@@ -1,7 +1,7 @@
 "use server";
 
 import { userSchema } from "../schema/schema";
-import { createUser } from "../db/queries";
+import { createUser } from "../db/queries/queries";
 import { drizzleErrorHandler } from "../db/errorHandler";
 
 export type SignUpActionState = {
