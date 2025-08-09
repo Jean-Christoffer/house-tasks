@@ -20,7 +20,7 @@ export async function GET(request: Request) {
       { status: 401 },
     );
   }
-  const userInfo = await getUserInfo(user.username);
+  const userInfo = await getUserInfo(Number(user.userId));
 
   if (!userInfo) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });

@@ -4,19 +4,16 @@ import { CheckCircle2 } from "lucide-react";
 import { z } from "zod";
 
 const AssignTaskSchema = z.object({
-  userId: z.coerce.number().int().positive(),
   taskId: z.coerce.number().int().positive(),
   householdId: z.coerce.number().int().positive(),
 });
 
 interface AssignTaskFormProps {
-  userId: number;
   taskId: number;
   householdId: number;
 }
 
 export default function AssignTaskForm({
-  userId,
   taskId,
   householdId,
 }: AssignTaskFormProps) {
@@ -30,8 +27,8 @@ export default function AssignTaskForm({
         throw new Error(pretty);
       }
 
-      const { userId, taskId, householdId } = parsed.data;
-      await assignSelectedTask(userId, taskId, householdId);
+      const { taskId, householdId } = parsed.data;
+      await assignSelectedTask(taskId, householdId);
     } catch (err) {
       console.error(err);
     }
@@ -39,7 +36,6 @@ export default function AssignTaskForm({
 
   return (
     <form action={assignTask}>
-      <input type="hidden" name="userId" value={userId} />
       <input type="hidden" name="taskId" value={taskId} />
       <input type="hidden" name="householdId" value={householdId} />
 

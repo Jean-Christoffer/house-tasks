@@ -3,26 +3,27 @@
 import { revalidatePath } from "next/cache";
 import { createTask, completeTask, assignTask } from "../db/queries/queries";
 
-export async function createTaskAction(
-  formData: FormData,
-  userName: string,
-  householdId: number,
-) {
-  const taskName = formData.get("taskName") as string;
-  const taskDescription = formData.get("taskDescription") as string;
-  await createTask(userName, taskName, taskDescription, householdId);
+import { requireUser } from "../auth/require-user";
+
+export async function completeCurrentTask(taskId: number) {
+  const user = await requireUser();
+  await completeTask(user.userId, taskId);
   revalidatePath("/");
 }
 
-export async function completeCurrentTask(userId: number, taskId: number) {
-  await completeTask(userId, taskId);
+export async function assignSelectedTask(taskId: number, householdId: number) {
+  const user = await requireUser();
+  await assignTask(user.userId, taskId, householdId);
   revalidatePath("/");
 }
-export async function assignSelectedTask(
-  userId: number,
-  taskId: number,
+
+export async function createTaskAction(
+  taskName: string,
+  taskDescription: string,
   householdId: number,
 ) {
-  await assignTask(userId, taskId, householdId);
+  const user = await requireUser();
+
+  await createTask(user.userId, taskName, taskDescription, householdId);
   revalidatePath("/");
 }

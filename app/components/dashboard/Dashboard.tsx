@@ -16,6 +16,7 @@ import {
 import Column from "./Column";
 import DraggableItem from "./DraggableItem";
 import TaskCard from "./TaskCard";
+import Logout from "../Logout";
 
 export default function Dashboard({
   userName,
@@ -79,13 +80,13 @@ export default function Dashboard({
     try {
       if (dstCol === "assigned") {
         if (!householdId) throw new Error("householdId mangler");
-        await assignSelectedTask(userId, moved.id, householdId);
+        await assignSelectedTask(moved.id, householdId);
       } else if (dstCol === "done") {
         if (srcCol === "unassigned") {
           if (!householdId) throw new Error("householdId mangler");
-          await assignSelectedTask(userId, moved.id, householdId);
+          await assignSelectedTask(moved.id, householdId);
         }
-        await completeCurrentTask(userId, moved.id);
+        await completeCurrentTask(moved.id);
       } else if (dstCol === "unassigned") {
         throw new Error("Å flytte til Ufordelt er ikke støttet ennå");
       }
@@ -97,10 +98,10 @@ export default function Dashboard({
 
   return (
     <div className="mx-auto max-w-6xl space-y-8 p-6">
-      {/* Header */}
       <div className="relative overflow-hidden rounded-3xl border bg-gradient-to-br from-background to-muted/40 p-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
+            <Logout />
             <h1 className="text-3xl font-bold tracking-tight">
               Hei, {userName} 👋
             </h1>
