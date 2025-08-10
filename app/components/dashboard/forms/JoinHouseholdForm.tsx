@@ -66,8 +66,8 @@ export default function JoinHouseholdForm() {
                 name="inviteCode"
                 value={inviteCode}
                 type="text"
-                minLength={10}
-                maxLength={10}
+                minLength={12}
+                maxLength={12}
                 required
                 onChange={(e) => setInviteCode(e.target.value)}
               />
