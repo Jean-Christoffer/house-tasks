@@ -3,7 +3,6 @@ import { compare } from "bcrypt-ts";
 
 export const compareTokens = async (token: string) => {
   const tokenToCompare = await getRefreshToken(token);
-  console.log(tokenToCompare);
 
   if (!tokenToCompare) return false;
 

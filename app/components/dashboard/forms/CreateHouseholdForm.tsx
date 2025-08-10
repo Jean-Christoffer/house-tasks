@@ -41,7 +41,7 @@ export default function CreateHouseholdForm() {
         toast.success("Husholdning laget!");
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   }
   return (

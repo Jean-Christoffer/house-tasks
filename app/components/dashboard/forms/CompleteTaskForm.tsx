@@ -25,7 +25,7 @@ export default function CompleteTaskForm({ taskId }: CompleteTaskFormProps) {
       const { taskId } = parsed.data;
       await completeCurrentTask(taskId);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   }
 

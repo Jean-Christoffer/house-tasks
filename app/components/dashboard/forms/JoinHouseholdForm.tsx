@@ -41,7 +41,7 @@ export default function JoinHouseholdForm() {
         toast.error("Fant ikke husholdningen, prøv igjen med en annen kode.");
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   }
   return (

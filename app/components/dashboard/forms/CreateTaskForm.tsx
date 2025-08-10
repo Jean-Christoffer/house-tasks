@@ -36,7 +36,7 @@ export default function CreateTaskForm({ householdId }: CreateTaskFormProps) {
       const { taskName, taskDescription } = parsed.data;
       await createTaskAction(taskName, taskDescription, householdId);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   }
 
