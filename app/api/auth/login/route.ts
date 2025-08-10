@@ -26,8 +26,11 @@ export async function POST(req: Request) {
 
   const secret: Secret = env.JWT_SECRET;
 
-  const accessToken = jwt.sign(payload, secret, { expiresIn: 3600 });
-  const refreshToken = jwt.sign(payload, secret, { expiresIn: 86400 });
+  const accessToken = jwt.sign(payload, secret, { expiresIn: "1h" });
+
+  const refreshToken = jwt.sign(payload, secret, {
+    expiresIn: env.JWT_EXPIRES_IN,
+  });
   const salt = genSaltSync(10);
   const hash = hashSync(refreshToken, salt);
 
@@ -43,11 +46,11 @@ export async function POST(req: Request) {
     path: "/",
   });
 
-  response.cookies.set("refreshToken", accessToken, {
+  response.cookies.set("refreshToken", refreshToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
-    maxAge: 86400,
+    maxAge: env.JWT_EXPIRES_IN,
     path: "/",
   });
 
