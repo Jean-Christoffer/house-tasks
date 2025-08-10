@@ -8,6 +8,7 @@ import { z } from "zod";
 import { DialogFooter } from "@/components/ui/dialog";
 
 import { createTaskAction } from "../../../lib/actions/tasks";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 const CreateTaskSchema = z.object({
   taskName: z.string(),
@@ -69,7 +70,9 @@ export default function CreateTaskForm({ householdId }: CreateTaskFormProps) {
       </div>
 
       <DialogFooter>
-        <Button type="submit">Lag oppgave</Button>
+        <DialogClose asChild>
+          <Button type="submit">Lag oppgave</Button>
+        </DialogClose>
       </DialogFooter>
     </form>
   );

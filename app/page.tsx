@@ -13,14 +13,19 @@ export default async function Home() {
       </main>
     );
 
+  console.log(user);
+
+  const tasks = user.household?.tasks;
+  const household = user?.household;
+
   return (
     <main>
       <Dashboard
         userName={user.userName}
         userId={user.id}
         completedTasks={user.completedTasks}
-        tasks={user.tasks}
-        household={user.household}
+        tasks={tasks}
+        household={household}
       />
     </main>
   );

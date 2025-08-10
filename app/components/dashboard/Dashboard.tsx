@@ -25,16 +25,16 @@ export default function Dashboard({
   tasks,
   household,
 }: DashboardProps) {
-  const householdId = household?.[0]?.id;
+  const householdId = household?.id;
 
   const initial = useMemo<Board>(() => {
-    const unassigned = tasks.filter(
+    const unassigned = tasks?.filter(
       (t) => !t.completed && t.assignedToUserId === null,
     );
-    const assigned = tasks.filter(
+    const assigned = tasks?.filter(
       (t) => !t.completed && t.assignedToUserId !== null,
     );
-    const done = tasks.filter((t) => !!t.completed);
+    const done = tasks?.filter((t) => !!t.completed);
     return { unassigned, assigned, done };
   }, [tasks]);
 
@@ -115,18 +115,14 @@ export default function Dashboard({
             className="flex items-center gap-2 text-base px-3 py-1 rounded-2xl"
           >
             <Home className="h-4 w-4" />{" "}
-            {household?.[0]?.houseName ?? "Ingen husholdning"}
+            {household?.houseName ?? "Ingen husholdning"}
           </Badge>
         </div>
 
         <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-gradient-to-tr from-indigo-500/10 via-sky-500/10 to-emerald-500/10" />
       </div>
 
-      <Taskbar
-        shouldRenderJoinHouseHold={!household?.length}
-        userName={userName}
-        householdId={householdId}
-      />
+      <Taskbar userName={userName} householdId={householdId} />
 
       <Separator />
 
@@ -139,7 +135,7 @@ export default function Dashboard({
             <div>
               <div className="text-xs text-muted-foreground">Ufordelt</div>
               <div className="text-lg font-semibold">
-                {board.unassigned.length}
+                {board?.unassigned?.length}
               </div>
             </div>
           </CardContent>
@@ -152,7 +148,7 @@ export default function Dashboard({
             <div>
               <div className="text-xs text-muted-foreground">Pågår</div>
               <div className="text-lg font-semibold">
-                {board.assigned.length}
+                {board?.assigned?.length}
               </div>
             </div>
           </CardContent>
@@ -164,7 +160,7 @@ export default function Dashboard({
             </span>
             <div>
               <div className="text-xs text-muted-foreground">Ferdig</div>
-              <div className="text-lg font-semibold">{board.done.length}</div>
+              <div className="text-lg font-semibold">{board?.done?.length}</div>
             </div>
           </CardContent>
         </Card>
@@ -175,12 +171,12 @@ export default function Dashboard({
           <Column
             title="Ufordelt"
             icon={<ClipboardList className="h-4 w-4" />}
-            count={board.unassigned.length}
+            count={board?.unassigned?.length}
             droppableId="unassigned"
           >
             {() => (
               <>
-                {board.unassigned.length ? (
+                {board?.unassigned?.length ? (
                   board.unassigned.map((task, index) => (
                     <Draggable
                       draggableId={String(task.id)}
@@ -209,12 +205,12 @@ export default function Dashboard({
           <Column
             title="Pågår"
             icon={<Loader2 className="h-4 w-4" />}
-            count={board.assigned.length}
+            count={board?.assigned?.length}
             droppableId="assigned"
           >
             {() => (
               <>
-                {board.assigned.length ? (
+                {board?.assigned?.length ? (
                   board.assigned.map((task, index) => (
                     <Draggable
                       draggableId={String(task.id)}
@@ -243,12 +239,12 @@ export default function Dashboard({
           <Column
             title="Ferdig"
             icon={<CheckCircle2 className="h-4 w-4" />}
-            count={board.done.length}
+            count={board?.done?.length}
             droppableId="done"
           >
             {() => (
               <>
-                {board.done.length ? (
+                {board?.done?.length ? (
                   board.done.map((task, index) => (
                     <Draggable
                       draggableId={String(task.id)}
