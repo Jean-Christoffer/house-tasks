@@ -13,8 +13,6 @@ export default async function Home() {
       </main>
     );
 
-  console.log(user);
-
   const tasks = user.household?.tasks;
   const household = user?.household;
 
