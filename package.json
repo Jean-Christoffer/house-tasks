@@ -43,7 +43,6 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
-    "@types/cookie": "^1.0.0",
     "@types/node": "^24",
     "@types/pg": "^8.15.5",
     "@types/react": "^19",
