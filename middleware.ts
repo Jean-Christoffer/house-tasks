@@ -21,8 +21,6 @@ const redirectToLogin = (request: NextRequest) => {
   }
 };
 
-//TODO: refactor this :))
-
 export async function middleware(request: NextRequest) {
   const { pathname, origin } = request.nextUrl;
 
