@@ -87,9 +87,7 @@ export default function TaskCard({
                 <AssignTaskForm taskId={task.id} householdId={householdId} />
               ) : null}
 
-              {canComplete ? (
-                <CompleteTaskForm userId={userId} taskId={task.id} />
-              ) : null}
+              {canComplete ? <CompleteTaskForm taskId={task.id} /> : null}
             </div>
           </div>
         </CardContent>
