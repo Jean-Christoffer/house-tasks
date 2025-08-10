@@ -13,7 +13,6 @@ export type Household = {
   id: number;
   inviteCode: string;
   houseName: string;
-  createdByUserId: number;
 };
 
 export type DashboardProps = {
@@ -21,7 +20,7 @@ export type DashboardProps = {
   userId: number;
   completedTasks: number; // total completed by this user
   tasks: Task[];
-  household: Household[];
+  household: Household;
 };
 
 export type Board = {

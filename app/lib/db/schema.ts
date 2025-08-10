@@ -25,6 +25,7 @@ export const users = pgTable(
 export const usersRelations = relations(users, ({ many }) => ({
   tasks: many(tasks),
   household: many(household),
+  householdData: many(householdMembers),
 }));
 
 export const tasks = pgTable("tasks", {
@@ -42,13 +43,6 @@ export const tasks = pgTable("tasks", {
   completed: boolean("completed").notNull().default(false),
 });
 
-export const tasksRelations = relations(tasks, ({ one }) => ({
-  tasks: one(users, {
-    fields: [tasks.createdByUserId],
-    references: [users.id],
-  }),
-}));
-
 export const household = pgTable("household", {
   id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
   inviteCode: varchar("invite_code", { length: 32 }).notNull().unique(),
@@ -57,13 +51,6 @@ export const household = pgTable("household", {
     .notNull()
     .references(() => users.id),
 });
-
-export const householdRelations = relations(household, ({ one }) => ({
-  households: one(users, {
-    fields: [household.createdByUserId],
-    references: [users.id],
-  }),
-}));
 
 export const householdMembers = pgTable(
   "household_members",
@@ -81,9 +68,45 @@ export const householdMembers = pgTable(
     uniqueIndex("household_user_idx").on(table.householdId, table.userId),
   ],
 );
+
 export const tokens = pgTable("tokens", {
   id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
   userId: integer("user_id").references(() => users.id),
   token: text("token").notNull(),
   expiresAt: timestamp("expires_at").notNull(),
 });
+
+export const householdRelations = relations(household, ({ one, many }) => ({
+  creator: one(users, {
+    fields: [household.createdByUserId],
+    references: [users.id],
+  }),
+
+  members: many(householdMembers),
+  tasks: many(tasks),
+}));
+
+export const householdMembersRelations = relations(
+  householdMembers,
+  ({ one }) => ({
+    household: one(household, {
+      fields: [householdMembers.householdId],
+      references: [household.id],
+    }),
+    user: one(users, {
+      fields: [householdMembers.userId],
+      references: [users.id],
+    }),
+  }),
+);
+export const tasksRelations = relations(tasks, ({ one }) => ({
+  creator: one(users, {
+    fields: [tasks.createdByUserId],
+    references: [users.id],
+  }),
+
+  household: one(household, {
+    fields: [tasks.householdId],
+    references: [household.id],
+  }),
+}));

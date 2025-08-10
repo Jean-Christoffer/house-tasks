@@ -3,21 +3,32 @@ import { users } from "../schema";
 import { eq } from "drizzle-orm";
 
 export async function getUserInfo(userId: number) {
-  try {
-    const results = await db.query.users.findFirst({
-      where: eq(users.id, userId),
-      columns: {
-        password: false,
+  const user = await db.query.users.findFirst({
+    where: eq(users.id, userId),
+    columns: { password: false },
+    with: {
+      householdData: {
+        columns: {},
+        with: {
+          household: {
+            columns: { id: true, houseName: true, inviteCode: true },
+            with: {
+              tasks: true,
+            },
+          },
+        },
       },
-      with: {
-        tasks: true,
-        household: true,
-      },
-    });
+    },
+  });
 
-    const user = results ?? null;
-    return user;
-  } catch (err) {
-    console.error(err);
-  }
+  if (!user) return null;
+
+  const households = user.householdData.map((m) => m.household);
+
+  return {
+    id: user.id,
+    userName: user.userName,
+    completedTasks: user.completedTasks,
+    household: households[0],
+  };
 }

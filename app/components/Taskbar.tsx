@@ -10,43 +10,41 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import CreateTaskForm from "./dashboard/forms/CreateTaskForm";
+import JoinHouseholdForm from "./dashboard/forms/JoinHouseholdForm";
+import CreateHouseholdForm from "./dashboard/forms/CreateHouseholdForm";
 
 interface TaskbarProps {
-  shouldRenderJoinHouseHold: boolean;
   userName: string;
-  householdId: number;
+  householdId: number | null;
 }
 
-export default function Taskbar({
-  shouldRenderJoinHouseHold,
-  householdId,
-}: TaskbarProps) {
+export default function Taskbar({ householdId }: TaskbarProps) {
   const [open, setOpen] = useState(false);
 
   return (
     <div className="flex items-center gap-2">
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <Button
-            className="cursor-pointer rounded"
-            disabled={shouldRenderJoinHouseHold}
-          >
-            Lag en oppave
-          </Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Lag en ny oppgave</DialogTitle>
-          </DialogHeader>
+      {householdId && (
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild>
+            <Button className="cursor-pointer rounded" disabled={!householdId}>
+              Lag en oppave
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Lag en ny oppgave</DialogTitle>
+            </DialogHeader>
 
-          <CreateTaskForm householdId={householdId} />
-        </DialogContent>
-      </Dialog>
+            <CreateTaskForm householdId={householdId} />
+          </DialogContent>
+        </Dialog>
+      )}
 
-      {shouldRenderJoinHouseHold && (
-        <Button className="cursor-pointer rounded">
-          Bli med i en husholdning!
-        </Button>
+      {!householdId && (
+        <div className="flex items-center gap-2">
+          <CreateHouseholdForm />
+          <JoinHouseholdForm />
+        </div>
       )}
     </div>
   );
