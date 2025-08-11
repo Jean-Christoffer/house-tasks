@@ -1,4 +1,3 @@
-// middleware.test.ts
 import { describe, it, beforeEach, expect, vi, type Mock } from "vitest";
 import { NextRequest, NextResponse } from "next/server";
 import * as MW from "./middleware";
@@ -71,9 +70,9 @@ describe("middleware", () => {
     mockedVerify.mockResolvedValue({ sub: "user" });
 
     const res = await MW.middleware(makeReq("/"));
-    // next() also returns a NextResponse instance
+
     expect(res).toBeInstanceOf(NextResponse);
-    // no redirect header
+
     expect(res?.headers.get("location")).toBeNull();
   });
 
