@@ -17,6 +17,7 @@ import Column from "./Column";
 import DraggableItem from "./DraggableItem";
 import TaskCard from "./TaskCard";
 import Logout from "../Logout";
+import CopyButton from "./CopyButton";
 
 export default function Dashboard({
   userName,
@@ -112,10 +113,25 @@ export default function Dashboard({
 
           <Badge
             variant="outline"
-            className="flex items-center gap-2 text-base px-3 py-1 rounded-2xl"
+            className="flex flex-col items-center gap-2 text-base px-3 py-1 rounded-2xl"
           >
-            <Home className="h-4 w-4" />{" "}
-            {household?.houseName ?? "Ingen husholdning"}
+            <div className="flex items-center gap-2">
+              <Home className="h-4 w-4" />{" "}
+              {household?.houseName ?? "Ingen husholdning"}
+            </div>
+            {household.inviteCode && (
+              <>
+                <Separator />
+                <div className="items-center flex flex-col gap-2">
+                  <p>
+                    <small>
+                      Inviter brukere til husholdningen med koden under.
+                    </small>
+                  </p>
+                  <CopyButton text={household.inviteCode} />
+                </div>
+              </>
+            )}
           </Badge>
         </div>
 
