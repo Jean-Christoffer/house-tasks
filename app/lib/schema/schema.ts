@@ -1,15 +1,12 @@
 import { z } from "zod";
 
 export const userSchema = z.object({
-  username: z.string().min(5),
+  username: z.string().min(5, "Brukernavnet må være minst 5 tegn"),
   password: z
     .string()
-    .min(8, "Password must be at least 8 characters long")
-    .regex(/[A-Z]/, " Password must contain at least one uppercase letter")
-    .regex(/[a-z]/, " Password must contain at least one lowercase letter")
-    .regex(/[0-9]/, " Password must contain at least one number")
-    .regex(
-      /[^A-Za-z0-9]/,
-      "Password must contain at least one special character",
-    ),
+    .min(8, "Passordet må være minst 8 tegn")
+    .regex(/[A-Z]/, "Passordet må inneholde minst én stor bokstav")
+    .regex(/[a-z]/, "Passordet må inneholde minst én liten bokstav")
+    .regex(/[0-9]/, "Passordet må inneholde minst ett tall")
+    .regex(/[^A-Za-z0-9]/, "Passordet må inneholde minst ett spesialtegn"),
 });
