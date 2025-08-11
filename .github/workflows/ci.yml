@@ -1,3 +1,5 @@
+permissions:
+  contents: read
 name: ci
 on:
   pull_request:
@@ -25,3 +27,21 @@ jobs:
 
       - name: "Check lint"
         run: npm run lint -- --max-warnings=0
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm run test
