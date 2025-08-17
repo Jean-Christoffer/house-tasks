@@ -31,13 +31,16 @@ export async function signupAction(
     const fieldErrors = validatedFields.error.flatten().fieldErrors;
     return {
       username,
-      password,
+      password: "",
       errors: fieldErrors,
     };
   }
 
+  const { username: cleanUsername, password: cleanPassword } =
+    validatedFields.data;
+
   try {
-    await createUser(username, password);
+    await createUser(cleanUsername, cleanPassword);
     return { ok: true };
   } catch (err) {
     const drizzleError = drizzleErrorHandler(err);

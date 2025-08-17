@@ -7,7 +7,7 @@ import { genSaltSync, hashSync, compare } from "bcrypt-ts";
 
 export async function POST(req: Request) {
   const { username, password } = await req.json();
-  const user = await getUser(username);
+  const user = await getUser(username.trim());
 
   if (!user) {
     return NextResponse.json({ error: "User does not exist" }, { status: 401 });
