@@ -1,4 +1,4 @@
-import type { Board } from "./types";
+import type { Board } from "../types";
 
 import { Droppable } from "@hello-pangea/dnd";
 import { Badge } from "@/components/ui/badge";

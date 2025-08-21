@@ -18,7 +18,7 @@ export type Household = {
 export type DashboardProps = {
   userName: string;
   userId: number;
-  completedTasks: number; // total completed by this user
+  completedTasks: number;
   tasks: Task[];
   household: Household;
 };
