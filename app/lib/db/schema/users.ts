@@ -1,7 +1,7 @@
 import { relations } from "drizzle-orm";
 import { pgTable, integer, uniqueIndex, varchar } from "drizzle-orm/pg-core";
 
-import { household, householdMembers } from "./households";
+import { household, householdMembers } from "./household";
 import { tasks } from "./tasks";
 
 export const users = pgTable(

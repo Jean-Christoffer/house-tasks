@@ -8,7 +8,7 @@ import {
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
-import { household } from "./households";
+import { household } from "./household";
 import { users } from "./users";
 
 export const tasks = pgTable("tasks", {
