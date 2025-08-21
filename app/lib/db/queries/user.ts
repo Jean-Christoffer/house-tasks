@@ -1,6 +1,32 @@
+import { genSaltSync, hashSync } from "bcrypt-ts";
+import { eq } from "drizzle-orm";
+
 import { db } from "../db";
 import { users } from "../schema";
-import { eq } from "drizzle-orm";
+
+export async function createUser(userName: string, password: string) {
+  const salt = genSaltSync(10);
+  const hash = hashSync(password, salt);
+  try {
+    await db.insert(users).values({ userName, password: hash });
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+export async function getUser(username: string) {
+  try {
+    const results = await db
+      .select()
+      .from(users)
+      .where(eq(users.userName, username));
+
+    const user = results[0] ?? null;
+    return user;
+  } catch (err) {
+    console.error(err);
+  }
+}
 
 export async function getUserInfo(userId: number) {
   const user = await db.query.users.findFirst({

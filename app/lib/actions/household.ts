@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { joinHousehold, createHousehold } from "../db/queries/queries";
+import { joinHousehold, createHousehold } from "../db/queries/household";
 import { requireUser } from "../auth/require-user";
 
 export async function joinHouseholdByInvite(inviteCode: string) {

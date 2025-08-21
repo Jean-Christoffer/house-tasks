@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { parseAuthCookie, verifyJwt } from "@/app/lib/utils/jwt";
-import { getUserInfo } from "@/app/lib/db/queries/relationQueries";
+import { getUserInfo } from "@/app/lib/db/queries/user";
 
 export async function GET(request: Request) {
   const tokens = parseAuthCookie(request.headers.get("cookie"));
