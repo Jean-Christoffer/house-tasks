@@ -155,6 +155,7 @@ export async function createTask(
         taskName,
         taskDescription,
         createdByUserId: user.id,
+
         householdId,
       });
     });
@@ -176,10 +177,14 @@ export async function completeTask(userId: number, taskId: number) {
 export async function assignTask(
   userId: number,
   taskId: number,
+
   householdId: number,
 ) {
   await db
     .update(tasks)
-    .set({ assignedToUserId: userId, householdId: householdId })
+    .set({
+      assignedToUserId: userId,
+      householdId: householdId,
+    })
     .where(eq(tasks.id, taskId));
 }

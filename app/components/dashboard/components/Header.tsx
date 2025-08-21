@@ -5,6 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import { Home } from "lucide-react";
 import Logout from "../../Logout";
 import CopyButton from "./CopyButton";
+import { AvatarImage, Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 export function Header({
   userName,
@@ -22,12 +23,25 @@ export function Header({
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <Logout />
-          <h1 className="text-3xl font-bold tracking-tight">
-            Hei, {userName} 👋
-          </h1>
-          <p className="text-muted-foreground">
-            Du har fullført <strong>{completedTasks}</strong> oppgaver
-          </p>
+          <div className="flex items-center gap-4">
+            <Avatar className="h-10 w-10">
+              <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+              <AvatarFallback>
+                <AvatarImage
+                  src="https://github.com/shadcn.png"
+                  alt="@shadcn"
+                />
+              </AvatarFallback>
+            </Avatar>
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight">
+                Hei, {userName} 👋
+              </h1>
+              <p className="text-muted-foreground">
+                Du har fullført <strong>{completedTasks}</strong> oppgaver
+              </p>
+            </div>
+          </div>
         </div>
 
         <Badge

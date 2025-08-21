@@ -9,9 +9,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import CreateTaskForm from "./dashboard/components/forms/CreateTaskForm";
-import JoinHouseholdForm from "./dashboard/components/forms/JoinHouseholdForm";
-import CreateHouseholdForm from "./dashboard/components/forms/CreateHouseholdForm";
+import CreateTaskForm from "./forms/CreateTaskForm";
+import JoinHouseholdForm from "./forms/JoinHouseholdForm";
+import CreateHouseholdForm from "./forms/CreateHouseholdForm";
 
 interface TaskbarProps {
   userName: string;

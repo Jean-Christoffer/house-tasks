@@ -23,7 +23,9 @@ export const users = pgTable(
 );
 
 export const usersRelations = relations(users, ({ many }) => ({
-  tasks: many(tasks),
+  createdTasks: many(tasks, { relationName: "createdTasks" }),
+  assignedTasks: many(tasks, { relationName: "assignedTasks" }),
+
   household: many(household),
   householdData: many(householdMembers),
 }));
@@ -36,7 +38,7 @@ export const tasks = pgTable("tasks", {
   assignedToUserId: integer("assigned_to_user_id").references(() => users.id),
   createdByUserId: integer("created_by_user_id")
     .notNull()
-    .references(() => users.id),
+    .references(() => users.id), // FK to users.id
   taskName: varchar("task_name", { length: 254 }).notNull(),
   taskDescription: text("task_description").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
@@ -103,8 +105,13 @@ export const tasksRelations = relations(tasks, ({ one }) => ({
   creator: one(users, {
     fields: [tasks.createdByUserId],
     references: [users.id],
+    relationName: "createdTasks",
   }),
-
+  assignee: one(users, {
+    fields: [tasks.assignedToUserId],
+    references: [users.id],
+    relationName: "assignedTasks",
+  }),
   household: one(household, {
     fields: [tasks.householdId],
     references: [household.id],

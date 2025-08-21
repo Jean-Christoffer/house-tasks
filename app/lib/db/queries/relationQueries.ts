@@ -13,7 +13,21 @@ export async function getUserInfo(userId: number) {
           household: {
             columns: { id: true, houseName: true, inviteCode: true },
             with: {
-              tasks: true,
+              tasks: {
+                columns: {
+                  id: true,
+                  taskName: true,
+                  taskDescription: true,
+                  createdAt: true,
+                  completed: true,
+                  createdByUserId: true,
+                  assignedToUserId: true,
+                },
+                with: {
+                  creator: { columns: { id: true, userName: true } },
+                  assignee: { columns: { id: true, userName: true } },
+                },
+              },
             },
           },
         },
@@ -23,12 +37,32 @@ export async function getUserInfo(userId: number) {
 
   if (!user) return null;
 
-  const households = user.householdData.map((m) => m.household);
+  const household = user.householdData.map((m) => m.household)[0];
+
+  const tasks = (household?.tasks ?? []).map((t) => ({
+    id: t.id,
+    name: t.taskName,
+    description: t.taskDescription,
+    createdAt: t.createdAt,
+    completed: t.completed,
+    createdBy: { id: t.creator.id, userName: t.creator.userName },
+
+    assignedTo: t.assignee
+      ? { id: t.assignee.id, userName: t.assignee.userName }
+      : null,
+  }));
 
   return {
     id: user.id,
     userName: user.userName,
     completedTasks: user.completedTasks,
-    household: households[0],
+    household: household
+      ? {
+        id: household.id,
+        houseName: household.houseName,
+        inviteCode: household.inviteCode,
+        tasks,
+      }
+      : null,
   };
 }

@@ -5,7 +5,7 @@ import { DragDropContext } from "@hello-pangea/dnd";
 import { ClipboardList, Loader2, CheckCircle2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Header } from "./components/Header";
-import Taskbar from "../Taskbar";
+import Taskbar from "./components/Taskbar";
 import StatCard from "./components/StatCard";
 import { TaskColumn } from "./components/TaskColumn";
 import { useBoard } from "./hooks/useBoard";
@@ -17,7 +17,8 @@ export default function Dashboard({
   tasks,
   household,
 }: DashboardProps) {
-  const householdId = household?.id;
+  const householdId: number | null = household?.id ?? null;
+
   const { board, onDragEnd } = useBoard(tasks, householdId);
 
   const stats = [
@@ -72,18 +73,20 @@ export default function Dashboard({
 
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="grid gap-4 md:grid-cols-3">
-          {columns.map((c) => (
-            <TaskColumn
-              key={c.key}
-              title={c.title}
-              icon={c.icon}
-              droppableId={c.key as keyof typeof board}
-              tasks={board[c.key as keyof typeof board]}
-              userId={userId}
-              householdId={householdId}
-              variant={c.variant}
-            />
-          ))}
+          {columns.map((c) => {
+            return (
+              <TaskColumn
+                key={c.key}
+                title={c.title}
+                icon={c.icon}
+                droppableId={c.key as keyof typeof board}
+                tasks={board[c.key as keyof typeof board]}
+                userId={userId}
+                householdId={householdId}
+                variant={c.variant}
+              />
+            );
+          })}
         </div>
       </DragDropContext>
     </div>
