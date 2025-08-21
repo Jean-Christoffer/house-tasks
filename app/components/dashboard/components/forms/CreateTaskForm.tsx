@@ -7,7 +7,7 @@ import { z } from "zod";
 
 import { DialogFooter } from "@/components/ui/dialog";
 
-import { createTaskAction } from "../../../lib/actions/tasks";
+import { createTaskAction } from "../../../../lib/actions/tasks";
 import { DialogClose } from "@radix-ui/react-dialog";
 
 const CreateTaskSchema = z.object({

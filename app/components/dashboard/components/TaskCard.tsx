@@ -1,6 +1,6 @@
-import type { Task } from "./types";
+import type { Task } from "../types";
 
-import { formatDate } from "./utils";
+import { formatDate } from "../utils";
 import CompleteTaskForm from "./forms/CompleteTaskForm";
 import AssignTaskForm from "./forms/AssignTaskForm";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
