@@ -1,6 +1,5 @@
 import { genSaltSync, hashSync } from "bcrypt-ts";
 import { eq } from "drizzle-orm";
-
 import { db } from "../db";
 import { users } from "../schema";
 
@@ -84,11 +83,11 @@ export async function getUserInfo(userId: number) {
     completedTasks: user.completedTasks,
     household: household
       ? {
-        id: household.id,
-        houseName: household.houseName,
-        inviteCode: household.inviteCode,
-        tasks,
-      }
+          id: household.id,
+          houseName: household.houseName,
+          inviteCode: household.inviteCode,
+          tasks,
+        }
       : null,
   };
 }
