@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { parseAuthCookie } from "@/app/lib/utils/jwt";
-import { deleteRefreshToken } from "@/app/lib/db/queries/queries";
+import { deleteRefreshToken } from "@/app/lib/db/queries/refreshToken";
 
 export async function POST(request: Request) {
   const response = NextResponse.redirect(new URL("/login", request.url));
