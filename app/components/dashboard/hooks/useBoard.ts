@@ -17,15 +17,15 @@ function reorder<T>(list: T[], startIndex: number, endIndex: number) {
   return result;
 }
 
-export function useBoard(tasks: Task[] | undefined, householdId?: number) {
+export function useBoard(tasks: Task[] | [], householdId?: number | null) {
+  const list = useMemo(() => tasks ?? [], [tasks]);
+
   const initial = useMemo<Board>(() => {
-    const unassigned =
-      tasks?.filter((t) => !t.completed && t.assignedToUserId === null) ?? [];
-    const assigned =
-      tasks?.filter((t) => !t.completed && t.assignedToUserId !== null) ?? [];
-    const done = tasks?.filter((t) => !!t.completed) ?? [];
+    const unassigned = list.filter((t) => !t.completed && !t.assignedTo);
+    const assigned = list.filter((t) => !t.completed && !!t.assignedTo);
+    const done = list.filter((t) => !!t.completed);
     return { unassigned, assigned, done };
-  }, [tasks]);
+  }, [list]);
 
   const [board, setBoard] = useState<Board>(initial);
   useEffect(() => setBoard(initial), [initial]);
@@ -68,6 +68,7 @@ export function useBoard(tasks: Task[] | undefined, householdId?: number) {
           }
           await completeCurrentTask(moved.id);
         } else if (dstCol === "unassigned") {
+          // Not supported yet (kept same behavior)
           throw new Error("Å flytte til Ufordelt er ikke støttet ennå");
         }
       } catch (err) {

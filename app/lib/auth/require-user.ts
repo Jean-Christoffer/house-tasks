@@ -6,6 +6,7 @@ import { verifyJwt } from "../utils/jwt";
 
 export async function requireUser(): Promise<{
   userId: number;
+  username: string;
 }> {
   const store = await cookies();
   const token = store.get("accessToken")?.value;
@@ -17,5 +18,6 @@ export async function requireUser(): Promise<{
 
   return {
     userId: Number(payload.userId),
+    username: String(payload.username),
   };
 }

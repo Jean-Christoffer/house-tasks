@@ -19,9 +19,9 @@ export function TaskColumn({
   title: string;
   icon: React.ReactNode;
   droppableId: keyof Board;
-  tasks: Task[];
+  tasks: Task[] | [];
   userId: number;
-  householdId?: number;
+  householdId: number | null;
   variant: "unassigned" | "assigned" | "done";
 }) {
   return (
@@ -32,23 +32,25 @@ export function TaskColumn({
       droppableId={droppableId}
     >
       {() =>
-        tasks?.length ? (
+        tasks?.length && householdId ? (
           tasks.map((task, index) => (
             <Draggable
               draggableId={String(task.id)}
               index={index}
               key={task.id}
             >
-              {(provided) => (
-                <DraggableItem provided={provided}>
-                  <TaskCard
-                    task={task}
-                    userId={userId}
-                    householdId={householdId}
-                    variant={variant}
-                  />
-                </DraggableItem>
-              )}
+              {(provided) => {
+                return (
+                  <DraggableItem provided={provided}>
+                    <TaskCard
+                      task={task}
+                      userId={userId}
+                      householdId={householdId}
+                      variant={variant}
+                    />
+                  </DraggableItem>
+                );
+              }}
             </Draggable>
           ))
         ) : (

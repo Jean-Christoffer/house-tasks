@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createTask, completeTask, assignTask } from "../db/queries/queries";
+import { createTask, completeTask, assignTask } from "../db/queries/task";
 
 import { requireUser } from "../auth/require-user";
 

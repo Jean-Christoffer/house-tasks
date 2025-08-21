@@ -1,10 +1,15 @@
 export type Task = {
   id: number;
-  householdId: number;
-  assignedToUserId: number | null;
-  createdByUserId: number;
-  taskName: string;
-  taskDescription: string;
+  assignedTo: {
+    id: number;
+    userName: string;
+  } | null;
+  createdBy: {
+    id: number;
+    userName: string;
+  };
+  name: string;
+  description: string;
   createdAt: Date | string;
   completed: boolean;
 };
@@ -19,8 +24,8 @@ export type DashboardProps = {
   userName: string;
   userId: number;
   completedTasks: number;
-  tasks: Task[];
-  household: Household;
+  tasks: Task[] | [];
+  household: Household | null;
 };
 
 export type Board = {
