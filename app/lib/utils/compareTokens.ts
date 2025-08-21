@@ -1,4 +1,4 @@
-import { getRefreshToken } from "../db/queries/queries";
+import { getRefreshToken } from "../db/queries/refreshToken";
 import { compare } from "bcrypt-ts";
 
 export const compareTokens = async (token: string) => {
