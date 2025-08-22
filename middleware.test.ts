@@ -14,7 +14,6 @@ const makeReq = (path: string, cookie = "") => {
   const url = new URL(`http://localhost:3000${path}`);
   const headers = new Headers();
   if (cookie) headers.set("cookie", cookie);
-
   return new NextRequest(url, { headers });
 };
 
@@ -43,16 +42,16 @@ describe("middleware", () => {
     const res = await MW.middleware(makeReq("/"));
 
     expect(res).toBeInstanceOf(NextResponse);
-
     expect(new URL(res!.headers.get("location")!).pathname).toBe("/login");
   });
 
-  it("allows /login when no tokens", async () => {
+  it("allows /login when no tokens (NextResponse.next())", async () => {
     mockedParse.mockReturnValue(undefined);
 
     const res = await MW.middleware(makeReq("/login"));
 
-    expect(res).toBeUndefined();
+    expect(res).toBeInstanceOf(NextResponse);
+    expect(res?.headers.get("location")).toBeNull();
   });
 
   it("with valid accessToken: /login -> redirect to /", async () => {
@@ -60,8 +59,8 @@ describe("middleware", () => {
     mockedVerify.mockResolvedValue({ sub: "user" });
 
     const res = await MW.middleware(makeReq("/login"));
-    expect(res).toBeInstanceOf(NextResponse);
 
+    expect(res).toBeInstanceOf(NextResponse);
     expect(new URL(res!.headers.get("location")!).pathname).toBe("/");
   });
 
@@ -72,16 +71,16 @@ describe("middleware", () => {
     const res = await MW.middleware(makeReq("/"));
 
     expect(res).toBeInstanceOf(NextResponse);
-
     expect(res?.headers.get("location")).toBeNull();
   });
 
   it("with refreshToken but invalid/expired -> redirect to /login", async () => {
     mockedParse.mockReturnValue({ refreshToken: "R" });
-    mockedVerify.mockResolvedValueOnce(null);
+    mockedVerify.mockResolvedValueOnce(null); 
     global.fetch = mkFetchFail();
 
     const res = await MW.middleware(makeReq("/"));
+
     expect(res).toBeInstanceOf(NextResponse);
     expect(new URL(res!.headers.get("location")!).pathname).toBe("/login");
   });
@@ -95,9 +94,9 @@ describe("middleware", () => {
     ]);
 
     const res = await MW.middleware(makeReq("/"));
+
     expect(res).toBeInstanceOf(NextResponse);
     expect(res?.headers.get("location")).toBeNull();
-
     expect(global.fetch).toHaveBeenCalledTimes(1);
   });
 
@@ -107,6 +106,7 @@ describe("middleware", () => {
     global.fetch = mkFetchFail();
 
     const res = await MW.middleware(makeReq("/"));
+
     expect(res).toBeInstanceOf(NextResponse);
     expect(new URL(res!.headers.get("location")!).pathname).toBe("/login");
   });
@@ -122,3 +122,4 @@ describe("middleware", () => {
     expect(res?.status).toBe(401);
   });
 });
+

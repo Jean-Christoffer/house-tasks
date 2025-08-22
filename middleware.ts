@@ -6,19 +6,13 @@ import type { NextRequest } from "next/server";
 import { NextURL } from "next/dist/server/web/next-url";
 
 const redirectToLogin = (request: NextRequest) => {
-  const { origin } = request.nextUrl;
-
-  try {
-    const loginUrl = new NextURL("/login", origin);
-    const response = NextResponse.redirect(loginUrl);
-
-    response.cookies.delete("accessToken");
-    response.cookies.delete("refreshToken");
-
-    return response;
-  } catch (err) {
-    console.error(err);
-  }
+  const loginUrl = new NextURL("/login", request.nextUrl.origin);
+  const res = NextResponse.redirect(loginUrl);
+  
+  res.cookies.delete("accessToken");
+  res.cookies.delete("refreshToken");
+  
+  return res;
 };
 
 export async function middleware(request: NextRequest) {
@@ -42,6 +36,7 @@ export async function middleware(request: NextRequest) {
       }
       return NextResponse.next();
     }
+    if (!refreshToken && pathname !== "/login") return redirectToLogin(request);
   }
 
   if (refreshToken) {
@@ -84,6 +79,7 @@ export async function middleware(request: NextRequest) {
 
     return NextResponse.next();
   }
+  return NextResponse.next();
 }
 
 export const config = {
