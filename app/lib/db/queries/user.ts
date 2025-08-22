@@ -8,14 +8,11 @@ export async function createUser(userName: string, password: string) {
   const salt = genSaltSync(10);
   const hash = hashSync(password, salt);
   try {
-    await db
-      .insert(users)
-      .values({
-        userName,
-        password: hash,
-        avatar:
-          avatarConfig[Math.floor(Math.random() * avatarConfig.length - 1)],
-      });
+    await db.insert(users).values({
+      userName,
+      password: hash,
+      avatar: avatarConfig[Math.floor(Math.random() * avatarConfig.length - 1)],
+    });
   } catch (err) {
     console.error(err);
   }
@@ -100,11 +97,11 @@ export async function getUserInfo(userId: number) {
     completedTasks: user.completedTasks,
     household: household
       ? {
-        id: household.id,
-        houseName: household.houseName,
-        inviteCode: household.inviteCode,
-        tasks,
-      }
+          id: household.id,
+          houseName: household.houseName,
+          inviteCode: household.inviteCode,
+          tasks,
+        }
       : null,
   };
 }
