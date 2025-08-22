@@ -2,12 +2,17 @@ import { genSaltSync, hashSync } from "bcrypt-ts";
 import { eq } from "drizzle-orm";
 import { db } from "../db";
 import { users } from "../schema";
+import { avatarConfig } from "@/app/components/dashboard/components/config";
 
 export async function createUser(userName: string, password: string) {
   const salt = genSaltSync(10);
   const hash = hashSync(password, salt);
   try {
-    await db.insert(users).values({ userName, password: hash });
+    await db.insert(users).values({
+      userName,
+      password: hash,
+      avatar: avatarConfig[Math.floor(Math.random() * avatarConfig.length - 1)],
+    });
   } catch (err) {
     console.error(err);
   }
@@ -22,6 +27,14 @@ export async function getUser(username: string) {
 
     const user = results[0] ?? null;
     return user;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+export async function updateUserAvatar(userId: number, avatar: string) {
+  try {
+    await db.update(users).set({ avatar }).where(eq(users.id, userId));
   } catch (err) {
     console.error(err);
   }
@@ -80,6 +93,7 @@ export async function getUserInfo(userId: number) {
   return {
     id: user.id,
     userName: user.userName,
+    avatar: user.avatar,
     completedTasks: user.completedTasks,
     household: household
       ? {

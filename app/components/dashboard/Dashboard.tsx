@@ -12,6 +12,7 @@ import { useBoard } from "./hooks/useBoard";
 
 export default function Dashboard({
   userName,
+  avatar,
   userId,
   completedTasks,
   tasks,
@@ -51,6 +52,7 @@ export default function Dashboard({
   return (
     <div className="mx-auto max-w-6xl space-y-8 p-6">
       <Header
+        avatar={avatar}
         userName={userName}
         completedTasks={completedTasks}
         houseName={household?.houseName}
@@ -84,6 +86,7 @@ export default function Dashboard({
                 userId={userId}
                 householdId={householdId}
                 variant={c.variant}
+                avatar={avatar}
               />
             );
           })}
