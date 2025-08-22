@@ -73,22 +73,24 @@ export default function TaskCard({
           ) : null}
 
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <Avatar className="h-7 w-7">
-                <AvatarImage
-                  src={avatar ?? "https://github.com/shadcn.png"}
-                  alt="@shadcn"
-                />
-                <AvatarFallback>-</AvatarFallback>
-              </Avatar>
-              <span>
-                {task.assignedTo
-                  ? task.assignedTo.id === userId
+            {task.assignedTo && (
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <Avatar className="h-7 w-7">
+                  <AvatarImage
+                    src={
+                      task.assignedTo.avatar ?? "https://github.com/shadcn.png"
+                    }
+                    alt="@shadcn"
+                  />
+                  <AvatarFallback>-</AvatarFallback>
+                </Avatar>
+                <span>
+                  {task.assignedTo.id === userId
                     ? "Tildelt til deg"
-                    : `Tildelt til ${task.assignedTo.userName}`
-                  : "Ingen tildelt"}
-              </span>
-            </div>
+                    : `Tildelt til ${task.assignedTo.userName}`}
+                </span>
+              </div>
+            )}
 
             <div className="flex items-center gap-2">
               {canAssign ? (
