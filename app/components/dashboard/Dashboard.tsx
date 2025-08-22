@@ -86,6 +86,7 @@ export default function Dashboard({
                 userId={userId}
                 householdId={householdId}
                 variant={c.variant}
+                avatar={avatar}
               />
             );
           })}

@@ -24,14 +24,18 @@ export default function TaskCard({
   userId,
   householdId,
   variant,
+  avatar,
 }: {
   task: Task;
   userId: number;
   householdId: number;
   variant: "unassigned" | "assigned" | "done";
+  avatar: string | null;
 }) {
   const canAssign = variant === "unassigned";
   const canComplete = variant === "assigned" && task.assignedTo?.id === userId;
+
+  console.log(avatar);
 
   return (
     <GradientRing>
@@ -87,7 +91,7 @@ export default function TaskCard({
                 </span>
               </div>
             )}
-
+            
             <div className="flex items-center gap-2">
               {canAssign ? (
                 <AssignTaskForm taskId={task.id} householdId={householdId} />
