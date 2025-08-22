@@ -15,6 +15,7 @@ export function TaskColumn({
   userId,
   householdId,
   variant,
+  avatar,
 }: {
   title: string;
   icon: React.ReactNode;
@@ -23,6 +24,7 @@ export function TaskColumn({
   userId: number;
   householdId: number | null;
   variant: "unassigned" | "assigned" | "done";
+  avatar: string | null;
 }) {
   return (
     <Column
@@ -47,6 +49,7 @@ export function TaskColumn({
                       userId={userId}
                       householdId={householdId}
                       variant={variant}
+                      avatar={avatar}
                     />
                   </DraggableItem>
                 );

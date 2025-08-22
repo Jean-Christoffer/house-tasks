@@ -24,14 +24,18 @@ export default function TaskCard({
   userId,
   householdId,
   variant,
+  avatar,
 }: {
   task: Task;
   userId: number;
   householdId: number;
   variant: "unassigned" | "assigned" | "done";
+  avatar: string | null;
 }) {
   const canAssign = variant === "unassigned";
   const canComplete = variant === "assigned" && task.assignedTo?.id === userId;
+
+  console.log(avatar);
 
   return (
     <GradientRing>
@@ -72,7 +76,7 @@ export default function TaskCard({
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <Avatar className="h-7 w-7">
                 <AvatarImage
-                  src="https://github.com/shadcn.png"
+                  src={avatar ?? "https://github.com/shadcn.png"}
                   alt="@shadcn"
                 />
                 <AvatarFallback>-</AvatarFallback>

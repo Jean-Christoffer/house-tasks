@@ -13,7 +13,7 @@ export default function Logout() {
   };
   if (!isLoggedIn) return null;
   return (
-    <button onClick={handleLogout} className="cursor-pointer font-bold my-2">
+    <button onClick={handleLogout} className="cursor-pointer font-bold mb-4">
       Logout
     </button>
   );

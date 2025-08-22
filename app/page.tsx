@@ -23,6 +23,7 @@ export default async function Home() {
     <main>
       <Dashboard
         userName={user.userName}
+        avatar={user.avatar}
         userId={user.id}
         completedTasks={user.completedTasks}
         tasks={tasks}

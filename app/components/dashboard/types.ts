@@ -23,6 +23,7 @@ export type Household = {
 export type DashboardProps = {
   userName: string;
   userId: number;
+  avatar: string | null;
   completedTasks: number;
   tasks: Task[] | [];
   household: Household | null;
