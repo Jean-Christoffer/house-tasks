@@ -91,7 +91,7 @@ export default function TaskCard({
                 </span>
               </div>
             )}
-            
+
             <div className="flex items-center gap-2">
               {canAssign ? (
                 <AssignTaskForm taskId={task.id} householdId={householdId} />
