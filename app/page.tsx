@@ -9,15 +9,13 @@ export default async function Home() {
   if (!user)
     return (
       <main className="flex justify-center items-center text-6xl">
-        <Link href="/signin">Login for å se dasbordet ditt</Link>
+        <Link href="/login">Login for å se dasbordet ditt</Link>
       </main>
     );
 
   const household = user?.household;
 
   const tasks = household?.tasks ?? [];
-
-  console.log(user);
 
   return (
     <main>

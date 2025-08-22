@@ -62,8 +62,12 @@ export async function getUserInfo(userId: number) {
                   assignedToUserId: true,
                 },
                 with: {
-                  creator: { columns: { id: true, userName: true } },
-                  assignee: { columns: { id: true, userName: true } },
+                  creator: {
+                    columns: { id: true, userName: true, avatar: true },
+                  },
+                  assignee: {
+                    columns: { id: true, userName: true, avatar: true },
+                  },
                 },
               },
             },
@@ -83,10 +87,18 @@ export async function getUserInfo(userId: number) {
     description: t.taskDescription,
     createdAt: t.createdAt,
     completed: t.completed,
-    createdBy: { id: t.creator.id, userName: t.creator.userName },
+    createdBy: {
+      id: t.creator.id,
+      userName: t.creator.userName,
+      avatar: t.creator.avatar,
+    },
 
     assignedTo: t.assignee
-      ? { id: t.assignee.id, userName: t.assignee.userName }
+      ? {
+          id: t.assignee.id,
+          userName: t.assignee.userName,
+          avatar: t.assignee.avatar,
+        }
       : null,
   }));
 

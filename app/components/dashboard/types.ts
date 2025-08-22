@@ -3,10 +3,12 @@ export type Task = {
   assignedTo: {
     id: number;
     userName: string;
+    avatar: string | null;
   } | null;
   createdBy: {
     id: number;
     userName: string;
+    avatar: string | null;
   };
   name: string;
   description: string;
