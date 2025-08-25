@@ -30,7 +30,7 @@
     "clsx": "^2.1.1",
     "cookie": "^1.0.2",
     "drizzle-orm": "^0.44.4",
-    "jose": "^6.0.12",
+    "jose": "^6.0.13",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.539.0",
     "nanoid": "^5.1.5",
